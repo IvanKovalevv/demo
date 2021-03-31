@@ -1,4 +1,4 @@
-package com.phonebook.model;
+package com.phonebook.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,7 +16,7 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Record> records;
 
 

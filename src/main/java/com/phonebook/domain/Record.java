@@ -1,4 +1,4 @@
-package com.phonebook.model;
+package com.phonebook.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,7 +17,8 @@ public class Record {
     private String lastName;
     private int number;
     private String note;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
     public Record() {

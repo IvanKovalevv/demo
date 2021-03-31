@@ -1,14 +1,13 @@
 package com.phonebook.controller;
 
-import com.phonebook.exceptions.NotFoundException;
-import com.phonebook.model.Record;
+import com.phonebook.domain.Record;
 import com.phonebook.repo.RecordRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("records")
+@RequestMapping("records/{id}")
 public class RecordController {
     private final RecordRepo recordRepo;
 
@@ -27,17 +26,15 @@ public class RecordController {
         return recordRepo.save(record);
     }
 
-    @PutMapping
-    public Record update(@PathVariable(value = "id") Record recordFromDb, @RequestBody Record record) {
-        Record records = recordRepo.findById(record.getId()).orElseThrow(NotFoundException::new);
-        BeanUtils.copyProperties(records, recordFromDb, "id");
+    @PutMapping("{id}")
+    public Record update(@PathVariable(value = "id") Record recordFromDb,
+                       @RequestBody Record record) {
+        BeanUtils.copyProperties(record, recordFromDb, "id");
         return recordRepo.save(recordFromDb);
     }
 
     @DeleteMapping
-    public void delete(@RequestBody Record record) {
+    public void delete(@PathVariable(value = "id") Record record) {
         recordRepo.delete(record);
     }
-
-
 }

@@ -1,7 +1,6 @@
 package com.phonebook.controller;
 
-import com.phonebook.exceptions.NotFoundException;
-import com.phonebook.model.User;
+import com.phonebook.domain.User;
 import com.phonebook.repo.UserRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
-public class MainController {
+@RequestMapping("users")
+public class UsersController {
     private final UserRepo userRepo;
 
     @Autowired
-    public MainController(UserRepo userRepo) {
+    public UsersController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
@@ -34,14 +33,14 @@ public class MainController {
         return userRepo.save(user);
     }
 
-    @PutMapping
-    public User update(@PathVariable("id") User userFromDb, @RequestBody User user) {
-        User users = userRepo.findById(user.getId()).orElseThrow(NotFoundException::new);
-        BeanUtils.copyProperties(users, userFromDb, "id");
+    @PutMapping("{id}")
+    public User update(@PathVariable(value = "id") User userFromDb,
+                       @RequestBody User user) {
+        BeanUtils.copyProperties(user, userFromDb, "id");
         return userRepo.save(userFromDb);
     }
 
-    @DeleteMapping
+    @DeleteMapping("{id}")
     public void delete(@PathVariable("id") User user) {
         userRepo.delete(user);
     }
